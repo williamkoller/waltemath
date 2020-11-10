@@ -20,4 +20,18 @@ export default class AuthController {
 
     return response.status(201).send(user.toJSON())
   }
+
+  public async login({ request, response, auth }: HttpContextContract) {
+    try {
+      const { email, password } = request.all()
+
+      const token = await auth.use('api').attempt(email, password)
+      return token.toJSON()
+    } catch (error) {
+      return response.status(400).send({
+        message: 'This request not performed',
+        error: error.stack,
+      })
+    }
+  }
 }

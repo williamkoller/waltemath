@@ -31,4 +31,7 @@ Route.get('health-check', async ({ response }) => {
   return report.healthy ? response.ok(report) : response.badRequest(report)
 })
 
-Route.post('register', 'Auth/AuthController.register').prefix('v1/')
+Route.group(() => {
+  Route.post('register', 'Auth/AuthController.register')
+  Route.post('login', 'Auth/AuthController.login')
+}).prefix('v1/')
