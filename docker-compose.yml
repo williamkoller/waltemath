@@ -1,0 +1,49 @@
+version: '3.2'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      ENV_SILENT: 'true'
+      DB_CONNECTION: ${DB_CONNECTION}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_PORT: ${DB_PORT}
+      DB_HOST: ${DB_HOST}
+
+      NODE_ENV: 'development'
+
+      HOST: '0.0.0.0'
+      PORT: '3333'
+      APP_URL: 'http://0.0.0.0:3333'
+
+      CACHE_VIEWS: 'false'
+      APP_KEY: ${APP_KEY}
+      HASH_DRIVER: 'bcrypt'
+
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - ${PORT}:${PORT}
+    networks:
+      - default
+    depends_on:
+      - db
+    links:
+      - db:db
+  db:
+    image: postgres:latest
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - ${DB_PORT}:${DB_PORT}
