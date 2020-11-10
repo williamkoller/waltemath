@@ -1,21 +1,21 @@
-FROM node:lts-alpine
-
-RUN mkdir -p /home/node/app/node_modules
-
-WORKDIR /home/node/app
-
-COPY package.json yarn.* ./
+FROM node:12.16.3-alpine
 
 RUN apk add --no-cache git
 
-COPY . /home/node/app/
+ENV ENV_SILENT=true
 
-RUN chown -R node:node /home/node
+RUN mkdir -p /app
 
-RUN yarn
+WORKDIR /app
+
+COPY . /app
+
+RUN yarn install
+
+RUN chown -R node:node /app
 
 USER node
 
 EXPOSE 3333
 
-ENTRYPOINT ["node","ace","serve","--watch"]
+CMD ["npm", "start"]

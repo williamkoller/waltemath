@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "build": "node ace build --production",
-    "start": "node server.js",
-    "dev": "node ace serve --watch",
+    "start": "ENV_SILENT=true node ace serve --watch",
     "lint": "eslint . --ext=.ts",
     "format": "prettier --write ."
   },
